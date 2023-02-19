@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">FRCFrenzy</string>
 
-    <string name="welcome_screen_slogan">Find information about FIRST Robotics Competition events, teams and more in a quick and efficient format</string>
+    <string name="welcome_screen_slogan">Find information about FIRST Robotics Competition events, teams and more in a simple and efficient format</string>
     <string name="welcome_screen_move_on_button_text">Let\'s go</string>
 
 </resources>

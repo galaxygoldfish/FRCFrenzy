@@ -3,10 +3,19 @@ package com.frcfrenzy.app.view
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.rounded.CalendarMonth
+import androidx.compose.material.icons.rounded.Celebration
+import androidx.compose.material.icons.rounded.Hardware
+import androidx.compose.material.icons.rounded.MilitaryTech
+import androidx.compose.material.icons.rounded.PrecisionManufacturing
+import androidx.compose.material.icons.rounded.SmartToy
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
@@ -29,6 +38,37 @@ fun WelcomeView(navController: NavController) {
     FRCFrenzyTheme {
         Surface {
             Box(modifier = Modifier.fillMaxSize()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.2F)
+                        .align(Alignment.TopCenter)
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.SmartToy,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth(0.33F)
+                            .fillMaxHeight(),
+                        tint = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                    Icon(
+                        imageVector = Icons.Rounded.Hardware,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth(0.5F)
+                            .fillMaxHeight(),
+                        tint = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                    Icon(
+                        imageVector = Icons.Rounded.PrecisionManufacturing,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth(1.0F)
+                            .fillMaxHeight(),
+                        tint = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                }
                 Column(
                     modifier = Modifier
                         .align(Alignment.Center)
@@ -42,7 +82,8 @@ fun WelcomeView(navController: NavController) {
                     )
                     Text(
                         text = stringResource(id = R.string.welcome_screen_slogan),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyLarge
                     )
                     FilledTonalButton(onClick = { /*TODO*/ }) {
                         Text(
@@ -54,6 +95,37 @@ fun WelcomeView(navController: NavController) {
                             contentDescription = null
                         )
                     }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.2F)
+                        .align(Alignment.BottomCenter)
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.CalendarMonth,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth(0.33F)
+                            .fillMaxHeight(),
+                        tint = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                    Icon(
+                        imageVector = Icons.Rounded.MilitaryTech,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth(0.5F)
+                            .fillMaxHeight(),
+                        tint = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                    Icon(
+                        imageVector = Icons.Rounded.Celebration,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth(1.0F)
+                            .fillMaxHeight(),
+                        tint = MaterialTheme.colorScheme.surfaceVariant
+                    )
                 }
             }
         }
