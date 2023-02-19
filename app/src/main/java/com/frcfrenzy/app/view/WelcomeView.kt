@@ -16,9 +16,7 @@ import androidx.compose.material.icons.rounded.Hardware
 import androidx.compose.material.icons.rounded.MilitaryTech
 import androidx.compose.material.icons.rounded.PrecisionManufacturing
 import androidx.compose.material.icons.rounded.SmartToy
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -83,7 +81,7 @@ fun WelcomeView(navController: NavController) {
                         style = MaterialTheme.typography.displayMedium
                     )
                     Text(
-                        text = stringResource(id = R.string.welcome_screen_slogan),
+                        text = stringResource(id = R.string.welcome_slogan),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodyLarge
                     )
@@ -94,7 +92,7 @@ fun WelcomeView(navController: NavController) {
                         }
                     ) {
                         Text(
-                            text = stringResource(id = R.string.welcome_screen_move_on_button_text),
+                            text = stringResource(id = R.string.welcome_move_on_button_text),
                             modifier = Modifier.padding(end = 10.dp),
                             style = MaterialTheme.typography.titleMedium
                         )

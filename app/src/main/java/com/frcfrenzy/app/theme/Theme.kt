@@ -9,11 +9,13 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 
 
@@ -21,6 +23,7 @@ import androidx.core.view.ViewCompat
 fun FRCFrenzyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = true,
+    tonalElevatedSystemBars: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -35,8 +38,13 @@ fun FRCFrenzyTheme(
     if (!view.isInEditMode) {
         SideEffect {
             (view.context as Activity).window.apply {
-                statusBarColor = colorScheme.background.toArgb()
-                navigationBarColor = colorScheme.background.toArgb()
+                val color = if (tonalElevatedSystemBars) {
+                    colorScheme.surfaceColorAtElevation(3.dp)
+                } else {
+                    colorScheme.background
+                }
+                statusBarColor = color.toArgb()
+                navigationBarColor = color.toArgb()
             }
             ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = !darkTheme
         }
