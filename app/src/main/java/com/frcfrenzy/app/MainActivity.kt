@@ -11,10 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.frcfrenzy.app.misc.NavDestination
 import com.frcfrenzy.app.theme.FRCFrenzyTheme
+import com.frcfrenzy.app.view.HomeView
 import com.frcfrenzy.app.view.WelcomeView
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.tencent.mmkv.MMKV
 
 class MainActivity : ComponentActivity() {
 
@@ -34,13 +36,21 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalAnimationApi::class)
     @Composable
     fun NavigationHost() {
+        val onboardingComplete = MMKV.defaultMMKV().decodeBool("ONBOARDING_COMPLETE", false)
         AnimatedNavHost(
             navController = navController,
-            startDestination = NavDestination.WelcomeScreen,
+            startDestination = if (onboardingComplete) {
+                NavDestination.Home
+            } else {
+                NavDestination.Welcome
+            },
             modifier = Modifier.fillMaxSize(),
             builder = {
-                composable(NavDestination.WelcomeScreen) {
+                composable(NavDestination.Welcome) {
                     WelcomeView(navController)
+                }
+                composable(NavDestination.Home) {
+                    HomeView(navController)
                 }
             }
         )

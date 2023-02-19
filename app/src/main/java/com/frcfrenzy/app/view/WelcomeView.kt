@@ -31,7 +31,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.frcfrenzy.app.R
+import com.frcfrenzy.app.misc.NavDestination
 import com.frcfrenzy.app.theme.FRCFrenzyTheme
+import com.tencent.mmkv.MMKV
 
 @Composable
 fun WelcomeView(navController: NavController) {
@@ -85,10 +87,16 @@ fun WelcomeView(navController: NavController) {
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodyLarge
                     )
-                    FilledTonalButton(onClick = { /*TODO*/ }) {
+                    FilledTonalButton(
+                        onClick = {
+                            MMKV.defaultMMKV().encode("ONBOARDING_COMPLETE", true)
+                            navController.navigate(NavDestination.Home)
+                        }
+                    ) {
                         Text(
                             text = stringResource(id = R.string.welcome_screen_move_on_button_text),
-                            modifier = Modifier.padding(end = 10.dp)
+                            modifier = Modifier.padding(end = 10.dp),
+                            style = MaterialTheme.typography.titleMedium
                         )
                         Icon(
                             imageVector = Icons.Default.ArrowForward,
