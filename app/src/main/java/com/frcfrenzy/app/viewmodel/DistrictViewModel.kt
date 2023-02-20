@@ -8,6 +8,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import com.frcfrenzy.app.model.DistrictItem
 import com.frcfrenzy.app.model.EventItem
+import com.frcfrenzy.app.model.TeamItem
 import com.frcfrenzy.app.networking.NetworkServiceBuilder.getNetworkService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,7 @@ class DistrictViewModel : ViewModel() {
     var isRefreshing by mutableStateOf(false)
     val districtList = mutableStateListOf<DistrictItem>()
     val districtEventList = mutableListOf<SnapshotStateList<EventItem>>()
+    val districtTeamList = mutableStateListOf<TeamItem>()
 
     private val networkService = getNetworkService()
 
@@ -46,6 +48,17 @@ class DistrictViewModel : ViewModel() {
                     districtEventList.add(it)
                 }
             }
+            isRefreshing = false
+        }
+    }
+
+    fun refreshDistrictTeamList(district: String) {
+        isRefreshing = true
+        districtTeamList.clear()
+        CoroutineScope(Dispatchers.Default).launch {
+            districtTeamList.addAll(
+                networkService.getTeamList(districtCode = district).teams
+            )
             isRefreshing = false
         }
     }

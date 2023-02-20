@@ -73,7 +73,7 @@ fun LinkCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 5.dp),
+            .padding(horizontal = 15.dp, vertical = 5.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp)
         ),

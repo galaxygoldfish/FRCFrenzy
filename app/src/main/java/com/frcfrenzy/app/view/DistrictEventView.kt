@@ -50,9 +50,10 @@ import com.frcfrenzy.app.theme.FRCFrenzyTheme
 import com.frcfrenzy.app.viewmodel.DistrictViewModel
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.frcfrenzy.app.components.TeamListItem
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
-    ExperimentalMaterialApi::class
+    ExperimentalMaterialApi::class, ExperimentalAnimationApi::class
 )
 @Composable
 fun DistrictEventView(
@@ -63,11 +64,19 @@ fun DistrictEventView(
     val pagerState = rememberPagerState()
     val pullRefreshState = rememberPullRefreshState(
         refreshing = viewModel.isRefreshing,
-        onRefresh = { viewModel.refreshDistrictEventList(districtCode) }
+        onRefresh = { 
+            when (pagerState.currentPage) {
+                0 -> viewModel.refreshDistrictTeamList(districtCode)
+                else -> viewModel.refreshDistrictEventList(districtCode)
+            }
+        }
     )
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(true) {
-        viewModel.refreshDistrictEventList(districtCode)
+        viewModel.apply {
+            refreshDistrictTeamList(districtCode)
+            refreshDistrictEventList(districtCode)
+        }
     }
     FRCFrenzyTheme(
         tonalElevatedStatus = true
@@ -110,12 +119,31 @@ fun DistrictEventView(
                         divider = {},
                         edgePadding = 0.dp
                     ) {
+                        Tab(
+                            selected = pagerState.currentPage == 0,
+                            onClick = {
+                                coroutineScope.launch {
+                                    pagerState.animateScrollToPage(0)
+                                }
+                            }
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.district_event_view_team_header),
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier.padding(20.dp),
+                                color = if (pagerState.currentPage == 0) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                }
+                            )
+                        }
                         repeat(6) { index ->
                             Tab(
-                                selected = pagerState.currentPage == index,
+                                selected = pagerState.currentPage == index + 1,
                                 onClick = {
                                     coroutineScope.launch {
-                                        pagerState.animateScrollToPage(index)
+                                        pagerState.animateScrollToPage(index + 1)
                                     }
                                 }
                             ) {
@@ -126,7 +154,7 @@ fun DistrictEventView(
                                     ),
                                     style = MaterialTheme.typography.titleMedium,
                                     modifier = Modifier.padding(20.dp),
-                                    color = if (pagerState.currentPage == index) {
+                                    color = if (pagerState.currentPage == index + 1) {
                                         MaterialTheme.colorScheme.primary
                                     } else {
                                         MaterialTheme.colorScheme.onSurfaceVariant
@@ -136,32 +164,52 @@ fun DistrictEventView(
                         }
                     }
                     HorizontalPager(
-                        pageCount = 6,
+                        pageCount = 7,
                         state = pagerState,
                         modifier = Modifier.fillMaxSize()
                     ) { pageNumber ->
-                        Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
-                            androidx.compose.animation.AnimatedVisibility(visible = !viewModel.isRefreshing) {
-                                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                                    item { Spacer(Modifier.height(10.dp)) }
-                                    if (viewModel.districtEventList.indices.contains(pageNumber)) {
-                                        items(viewModel.districtEventList[pageNumber]) { item ->
-                                            EventListItem(
-                                                eventName = item.name,
-                                                location = "${item.city}, ${item.stateprov}, ${item.country}",
-                                                startDate = item.dateStart,
-                                                endDate = item.dateEnd,
-                                                onClick = {}
-                                            )
+                        AnimatedContent(targetState = pageNumber) { state ->
+                            Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
+                                if (state == 0) {
+                                    androidx.compose.animation.AnimatedVisibility(visible = !viewModel.isRefreshing) {
+                                        LazyColumn {
+                                            items(viewModel.districtTeamList) { item ->
+                                                TeamListItem(
+                                                    teamName = item.nameShort,
+                                                    teamNumber = item.teamNumber.toString(),
+                                                    location = "${item.city}, ${item.stateProv}, ${item.country}",
+                                                    onClick = {}
+                                                )
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    androidx.compose.animation.AnimatedVisibility(visible = !viewModel.isRefreshing) {
+                                        LazyColumn {
+                                            item { Spacer(Modifier.height(10.dp)) }
+                                            if (viewModel.districtEventList.indices.contains(
+                                                    pageNumber - 1
+                                                )
+                                            ) {
+                                                items(viewModel.districtEventList[pageNumber - 1]) { item ->
+                                                    EventListItem(
+                                                        eventName = item.name,
+                                                        location = "${item.city}, ${item.stateprov}, ${item.country}",
+                                                        startDate = item.dateStart,
+                                                        endDate = item.dateEnd,
+                                                        onClick = {}
+                                                    )
+                                                }
+                                            }
                                         }
                                     }
                                 }
+                                PullRefreshIndicator(
+                                    refreshing = viewModel.isRefreshing,
+                                    state = pullRefreshState,
+                                    modifier = Modifier.align(Alignment.TopCenter)
+                                )
                             }
-                            PullRefreshIndicator(
-                                refreshing = viewModel.isRefreshing,
-                                state = pullRefreshState,
-                                modifier = Modifier.align(Alignment.TopCenter)
-                            )
                         }
                     }
                 }

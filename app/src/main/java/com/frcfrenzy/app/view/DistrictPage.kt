@@ -60,7 +60,7 @@ fun DistrictPage(
     ) {
         AnimatedVisibility(visible = viewModel.districtList.isNotEmpty()) {
             LazyColumn(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
                     .align(Alignment.TopCenter)
             ) {
                 item { Spacer(Modifier.height(10.dp)) }

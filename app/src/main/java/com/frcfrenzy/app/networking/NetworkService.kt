@@ -5,6 +5,7 @@ import com.frcfrenzy.app.model.DistrictList
 import com.frcfrenzy.app.model.EventItem
 import com.frcfrenzy.app.model.EventList
 import com.frcfrenzy.app.model.SeasonInformation
+import com.frcfrenzy.app.model.TeamList
 import okhttp3.Credentials
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -36,6 +37,16 @@ interface NetworkService {
         @Header("Authorization") basicAuth: String = getNetworkAuthCredentials(),
         @Path("season") season: Int = Year.now().value
     ) : DistrictList
+
+    @GET("{season}/teams")
+    suspend fun getTeamList(
+        @Header("Authorization") basicAuth: String = getNetworkAuthCredentials(),
+        @Path("season") season: Int = Year.now().value,
+        @Query("teamNumber") teamNumber: Int? = null,
+        @Query("eventCode") eventCode: String? = null,
+        @Query("districtCode") districtCode: String? = null,
+        @Query("page") page: Int? = null
+    ) : TeamList
 
 }
 
