@@ -58,7 +58,7 @@ val typography = Typography(
     titleLarge = TextStyle(
         fontFamily = PlexSansFont,
         fontSize = 22.sp,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Medium,
         letterSpacing = 0.sp
     ),
     titleMedium = TextStyle(

@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object NetworkServiceBuilder {
 
-    private const val FRC_EVENTS_BASE_URL = "https://www.reddit.com"
+    private const val FRC_EVENTS_BASE_URL = "https://frc-api.firstinspires.org/v3.0/"
 
     private val gsonObject = GsonBuilder().setLenient().create()
     private val okHttpClient = OkHttpClient.Builder().addInterceptor(

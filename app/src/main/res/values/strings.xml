@@ -7,10 +7,13 @@
     <string name="home_title_home_page">Home</string>
     <string name="home_title_districts_page">Districts</string>
     <string name="home_title_regionals_page">Regionals</string>
+    <string name="home_title_offseason_page">Offseason</string>
     <string name="home_title_teams_page">Teams</string>
 
     <string name="page_home_first_inspires_card_label">FIRSTInspires Dashboard</string>
     <string name="page_home_first_season_info_card_label">2023 FIRST Season</string>
     <string name="page_home_first_events_card_label">FRC Events Webpage</string>
+
+    <string name="page_regional_tab_week_format">WEEK %1$s</string>
 
 </resources>

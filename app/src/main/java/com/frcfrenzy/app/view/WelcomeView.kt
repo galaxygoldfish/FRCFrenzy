@@ -31,6 +31,7 @@ import androidx.navigation.NavController
 import com.frcfrenzy.app.R
 import com.frcfrenzy.app.misc.NavDestination
 import com.frcfrenzy.app.theme.FRCFrenzyTheme
+import com.tencent.mmkv.BuildConfig
 import com.tencent.mmkv.MMKV
 
 @Composable

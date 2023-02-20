@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -13,11 +15,20 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField(
+            type = "String",
+            name = "NetworkUsername",
+            value = gradleLocalProperties(rootDir).getProperty("NetworkUsername")
+        )
+        buildConfigField(
+            type = "String",
+            name = "NetworkToken",
+            value = gradleLocalProperties(rootDir).getProperty("NetworkToken")
+        )
     }
 
     buildTypes {

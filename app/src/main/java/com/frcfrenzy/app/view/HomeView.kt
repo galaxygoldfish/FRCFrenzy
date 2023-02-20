@@ -9,6 +9,7 @@ import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.ShareLocation
+import androidx.compose.material.icons.rounded.Upcoming
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,13 +45,14 @@ fun HomeView(
                     TopAppBar(
                         title = {
                             AnimatedContent(
-                                targetState = viewModel.currentTab
+                                targetState = viewModel.currentNavigationTab
                             ) { state ->
                                 Text(
                                     text = when (state) {
                                         0 -> stringResource(id = R.string.home_title_home_page)
                                         1 -> stringResource(id = R.string.home_title_districts_page)
                                         2 -> stringResource(id = R.string.home_title_regionals_page)
+                                        3 -> stringResource(id = R.string.home_title_offseason_page)
                                         else -> stringResource(id = R.string.home_title_teams_page)
                                     }
                                 )
@@ -72,8 +74,8 @@ fun HomeView(
                 bottomBar = {
                     NavigationBar {
                         NavigationBarItem(
-                            selected = viewModel.currentTab == 0,
-                            onClick = { viewModel.currentTab = 0 },
+                            selected = viewModel.currentNavigationTab == 0,
+                            onClick = { viewModel.currentNavigationTab = 0 },
                             icon = {
                                 Icon(
                                     imageVector = Icons.Rounded.Home,
@@ -85,8 +87,8 @@ fun HomeView(
                             }
                         )
                         NavigationBarItem(
-                            selected = viewModel.currentTab == 1,
-                            onClick = { viewModel.currentTab = 1 },
+                            selected = viewModel.currentNavigationTab == 1,
+                            onClick = { viewModel.currentNavigationTab = 1 },
                             icon = {
                                 Icon(
                                     imageVector = Icons.Rounded.ShareLocation,
@@ -98,8 +100,8 @@ fun HomeView(
                             }
                         )
                         NavigationBarItem(
-                            selected = viewModel.currentTab == 2,
-                            onClick = { viewModel.currentTab = 2 },
+                            selected = viewModel.currentNavigationTab == 2,
+                            onClick = { viewModel.currentNavigationTab = 2 },
                             icon = {
                                 Icon(
                                     imageVector = Icons.Rounded.Public,
@@ -111,8 +113,21 @@ fun HomeView(
                             }
                         )
                         NavigationBarItem(
-                            selected = viewModel.currentTab == 3,
-                            onClick = { viewModel.currentTab = 3 },
+                            selected = viewModel.currentNavigationTab == 3,
+                            onClick = { viewModel.currentNavigationTab = 3 },
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Rounded.Upcoming,
+                                    contentDescription = null
+                                )
+                            },
+                            label = {
+                                Text(text = stringResource(id = R.string.home_title_offseason_page))
+                            }
+                        )
+                        NavigationBarItem(
+                            selected = viewModel.currentNavigationTab == 4,
+                            onClick = { viewModel.currentNavigationTab = 4 },
                             icon = {
                                 Icon(
                                     imageVector = Icons.Rounded.Diversity3,
@@ -127,14 +142,15 @@ fun HomeView(
                 }
             ) { paddingValues ->
                 AnimatedContent(
-                    targetState = viewModel.currentTab,
+                    targetState = viewModel.currentNavigationTab,
                     modifier = Modifier.padding(paddingValues)
                 ) { state ->
                     when (state) {
                         0 -> HomePage()
                         1 -> DistrictPage()
                         2 -> RegionalPage()
-                        3 -> TeamPage()
+                        3 -> OffseasonPage()
+                        4 -> TeamPage()
                     }
                 }
             }
