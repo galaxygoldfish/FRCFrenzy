@@ -1,6 +1,7 @@
 package com.frcfrenzy.app.networking
 
 import com.frcfrenzy.app.BuildConfig
+import com.frcfrenzy.app.model.DistrictList
 import com.frcfrenzy.app.model.EventItem
 import com.frcfrenzy.app.model.EventList
 import com.frcfrenzy.app.model.SeasonInformation
@@ -29,6 +30,12 @@ interface NetworkService {
         @Query("tournamentType") tournamentType: String? = null,
         @Query("weekNumber") weekNumber: Int? = null
     ) : EventList
+
+    @GET("{season}/districts")
+    suspend fun getDistrictList(
+        @Header("Authorization") basicAuth: String = getNetworkAuthCredentials(),
+        @Path("season") season: Int = Year.now().value
+    ) : DistrictList
 
 }
 

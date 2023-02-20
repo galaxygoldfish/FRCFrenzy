@@ -64,6 +64,7 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.4.0-beta01")
     implementation("androidx.compose.ui:ui-tooling-preview:1.3.3")
     implementation("androidx.compose.material3:material3:1.1.0-alpha06")
+    implementation("androidx.compose.material:material:1.4.0-beta01")
     implementation("androidx.compose.material:material-icons-extended:1.3.1")
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -71,7 +72,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
 
-    implementation("com.google.accompanist:accompanist-navigation-animation:0.28.0")
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.29.1-alpha")
     implementation("com.google.code.gson:gson:2.9.0")
 
     implementation("com.tencent:mmkv:1.2.15")

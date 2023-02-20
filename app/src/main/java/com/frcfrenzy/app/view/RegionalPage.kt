@@ -1,33 +1,33 @@
 package com.frcfrenzy.app.view
 
-import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.frcfrenzy.app.R
@@ -36,11 +36,17 @@ import com.frcfrenzy.app.viewmodel.RegionalViewModel
 import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun RegionalPage(viewModel: RegionalViewModel = viewModel()) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = viewModel.isRefreshing,
+        onRefresh = {
+            viewModel.refreshRegionalEventList()
+        }
+    )
     LaunchedEffect(true) {
         viewModel.refreshRegionalEventList()
     }
@@ -82,20 +88,29 @@ fun RegionalPage(viewModel: RegionalViewModel = viewModel()) {
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
             ) { pageNumber ->
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    item { Spacer(Modifier.height(10.dp)) }
-                    if ((viewModel.regionalEventList.size - 1) >= pageNumber) {
-                        items(viewModel.regionalEventList[pageNumber]) { item ->
-                            EventListItem(
-                                eventName = item.name,
-                                location = "${item.city}, ${item.stateprov}, ${item.country}",
-                                startDate = item.dateStart,
-                                endDate = item.dateEnd
-                            ) {
+                Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
+                    androidx.compose.animation.AnimatedVisibility(visible = !viewModel.isRefreshing) {
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
+                            item { Spacer(Modifier.height(10.dp)) }
+                            if (viewModel.regionalEventList.indices.contains(pageNumber)) {
+                                items(viewModel.regionalEventList[pageNumber]) { item ->
+                                    EventListItem(
+                                        eventName = item.name,
+                                        location = "${item.city}, ${item.stateprov}, ${item.country}",
+                                        startDate = item.dateStart,
+                                        endDate = item.dateEnd
+                                    ) {
 
+                                    }
+                                }
                             }
                         }
                     }
+                    PullRefreshIndicator(
+                        refreshing = viewModel.isRefreshing,
+                        state = pullRefreshState,
+                        modifier = Modifier.align(Alignment.TopCenter)
+                    )
                 }
             }
         }

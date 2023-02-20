@@ -1,6 +1,9 @@
 package com.frcfrenzy.app.viewmodel
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import com.frcfrenzy.app.model.EventItem
@@ -12,10 +15,12 @@ import kotlinx.coroutines.launch
 class RegionalViewModel : ViewModel() {
 
     val regionalEventList = mutableListOf<SnapshotStateList<EventItem>>()
+    var isRefreshing by mutableStateOf(false)
 
     private val networkService = NetworkServiceBuilder.getNetworkService()
 
     fun refreshRegionalEventList() {
+        isRefreshing = true
         regionalEventList.clear()
         CoroutineScope(Dispatchers.Default).launch {
             repeat(6) { index ->
@@ -30,6 +35,7 @@ class RegionalViewModel : ViewModel() {
                     regionalEventList.add(stateList)
                 }
             }
+            isRefreshing = false
         }
     }
 
