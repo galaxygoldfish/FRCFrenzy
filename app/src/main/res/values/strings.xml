@@ -16,4 +16,6 @@
 
     <string name="page_regional_tab_week_format">WEEK %1$s</string>
 
+    <string name="district_event_view_header_format">%1$s District Events</string>
+
 </resources>

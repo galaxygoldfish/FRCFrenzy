@@ -26,10 +26,11 @@ fun EventListItem(
     location: String,
     startDate: String,
     endDate: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 15.dp, vertical = 5.dp),
         colors = CardDefaults.cardColors(

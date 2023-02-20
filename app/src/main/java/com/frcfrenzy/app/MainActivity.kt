@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.frcfrenzy.app.misc.NavDestination
 import com.frcfrenzy.app.theme.FRCFrenzyTheme
+import com.frcfrenzy.app.view.DistrictEventView
 import com.frcfrenzy.app.view.HomeView
 import com.frcfrenzy.app.view.WelcomeView
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -52,6 +53,12 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(NavDestination.Home) {
                     HomeView(navController)
+                }
+                composable("${NavDestination.DistrictEvent}/{districtCode}") {
+                    DistrictEventView(
+                        navController = navController,
+                        districtCode = it.arguments!!.getString("districtCode")!!
+                    )
                 }
             }
         )

@@ -1,6 +1,9 @@
 package com.frcfrenzy.app.view
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
@@ -36,7 +40,9 @@ import com.frcfrenzy.app.viewmodel.RegionalViewModel
 import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class,
+    ExperimentalAnimationApi::class
+)
 @Composable
 fun RegionalPage(viewModel: RegionalViewModel = viewModel()) {
     val pagerState = rememberPagerState()
@@ -93,15 +99,14 @@ fun RegionalPage(viewModel: RegionalViewModel = viewModel()) {
                         LazyColumn(modifier = Modifier.fillMaxSize()) {
                             item { Spacer(Modifier.height(10.dp)) }
                             if (viewModel.regionalEventList.indices.contains(pageNumber)) {
-                                items(viewModel.regionalEventList[pageNumber]) { item ->
+                                itemsIndexed(viewModel.regionalEventList[pageNumber]) { index, item ->
                                     EventListItem(
                                         eventName = item.name,
                                         location = "${item.city}, ${item.stateprov}, ${item.country}",
                                         startDate = item.dateStart,
-                                        endDate = item.dateEnd
-                                    ) {
-
-                                    }
+                                        endDate = item.dateEnd,
+                                        onClick = {}
+                                    )
                                 }
                             }
                         }

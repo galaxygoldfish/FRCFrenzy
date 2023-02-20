@@ -38,7 +38,10 @@ fun HomeView(
     navController: NavController,
     viewModel: HomeViewModel = viewModel()
 ) {
-    FRCFrenzyTheme(tonalElevatedSystemBars = true) {
+    FRCFrenzyTheme(
+        tonalElevatedStatus = true,
+        tonalElevatedNav = true
+    ) {
         Surface {
             Scaffold(
                 topBar = {
@@ -147,7 +150,7 @@ fun HomeView(
                 ) { state ->
                     when (state) {
                         0 -> HomePage()
-                        1 -> DistrictPage()
+                        1 -> DistrictPage(navController = navController)
                         2 -> RegionalPage()
                         3 -> OffseasonPage()
                         4 -> TeamPage()
