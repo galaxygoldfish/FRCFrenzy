@@ -2,8 +2,14 @@ package com.frcfrenzy.app.view
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CalendarToday
+import androidx.compose.material.icons.rounded.CalendarViewMonth
+import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Diversity3
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Public
@@ -23,7 +29,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -31,6 +39,8 @@ import com.frcfrenzy.app.viewmodel.HomeViewModel
 import com.frcfrenzy.app.theme.FRCFrenzyTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.frcfrenzy.app.R
+import com.tencent.mmkv.MMKV
+import java.time.Year
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -62,12 +72,24 @@ fun HomeView(
                             }
                         },
                         actions = {
-                          IconButton(onClick = { /*TODO*/ }) {
-                              Icon(
-                                  imageVector = Icons.Rounded.Settings,
-                                  contentDescription = null
-                              )
-                          }
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .padding(end = 10.dp)
+                                    .clip(MaterialTheme.shapes.small)
+                                    .background(MaterialTheme.colorScheme.primaryContainer)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.DateRange,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(25.dp).padding(vertical = 5.dp, horizontal = 5.dp)
+                                )
+                                Text(
+                                    text = MMKV.defaultMMKV().decodeString("CURRENT_YEAR", Year.now().value.toString())!!,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    modifier = Modifier.padding(top = 5.dp, bottom = 5.dp, end = 5.dp)
+                                )
+                            }
                         },
                         colors = TopAppBarDefaults.topAppBarColors(
                             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
@@ -152,7 +174,7 @@ fun HomeView(
                         0 -> HomePage()
                         1 -> DistrictPage(navController = navController)
                         2 -> RegionalPage()
-                        3 -> OffseasonPage()
+                        3 -> OffseasonPage(navController = navController)
                         4 -> TeamPage()
                     }
                 }

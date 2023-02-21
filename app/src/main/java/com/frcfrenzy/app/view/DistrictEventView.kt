@@ -4,12 +4,15 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -19,6 +22,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.BackHand
+import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -27,6 +31,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Surface
@@ -41,6 +46,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -51,6 +57,8 @@ import com.frcfrenzy.app.viewmodel.DistrictViewModel
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.frcfrenzy.app.components.TeamListItem
+import com.tencent.mmkv.MMKV
+import java.time.Year
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
     ExperimentalMaterialApi::class, ExperimentalAnimationApi::class
@@ -59,6 +67,7 @@ import com.frcfrenzy.app.components.TeamListItem
 fun DistrictEventView(
     navController: NavController,
     districtCode: String,
+    districtName: String,
     viewModel: DistrictViewModel = viewModel()
 ) {
     val pagerState = rememberPagerState()
@@ -84,12 +93,12 @@ fun DistrictEventView(
         Surface {
             Scaffold(
                 topBar = {
-                    TopAppBar(
+                    MediumTopAppBar(
                         title = {
                             Text(
                                 text = String.format(
                                     stringResource(id = R.string.district_event_view_header_format),
-                                    districtCode
+                                    districtName
                                 ),
                                 style = MaterialTheme.typography.titleLarge
                             )
@@ -99,6 +108,26 @@ fun DistrictEventView(
                                 Icon(
                                     imageVector = Icons.Rounded.ArrowBack,
                                     contentDescription = null
+                                )
+                            }
+                        },
+                        actions = {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .padding(end = 10.dp)
+                                    .clip(MaterialTheme.shapes.small)
+                                    .background(MaterialTheme.colorScheme.primaryContainer)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.DateRange,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(25.dp).padding(vertical = 5.dp, horizontal = 5.dp)
+                                )
+                                Text(
+                                    text = MMKV.defaultMMKV().decodeString("CURRENT_YEAR", Year.now().value.toString())!!,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    modifier = Modifier.padding(top = 5.dp, bottom = 5.dp, end = 5.dp)
                                 )
                             }
                         },
@@ -173,6 +202,7 @@ fun DistrictEventView(
                                 if (state == 0) {
                                     androidx.compose.animation.AnimatedVisibility(visible = !viewModel.isRefreshing) {
                                         LazyColumn {
+                                            item { Spacer(Modifier.height(10.dp)) }
                                             items(viewModel.districtTeamList) { item ->
                                                 TeamListItem(
                                                     teamName = item.nameShort,
@@ -185,7 +215,7 @@ fun DistrictEventView(
                                     }
                                 } else {
                                     androidx.compose.animation.AnimatedVisibility(visible = !viewModel.isRefreshing) {
-                                        LazyColumn {
+                                        LazyColumn(modifier = Modifier.fillMaxSize()) {
                                             item { Spacer(Modifier.height(10.dp)) }
                                             if (viewModel.districtEventList.indices.contains(
                                                     pageNumber - 1

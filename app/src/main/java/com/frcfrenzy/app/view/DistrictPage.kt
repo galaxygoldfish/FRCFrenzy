@@ -4,7 +4,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -65,11 +67,15 @@ fun DistrictPage(
             ) {
                 item { Spacer(Modifier.height(10.dp)) }
                 items(viewModel.districtList) { item ->
+                    val districtName = item.name
+                        .removePrefix("FIRST")
+                        .removePrefix("In ")
+                        .removeSuffix("Robotics")
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                navController.navigate("${NavDestination.DistrictEvent}/${item.code}")
+                                navController.navigate("${NavDestination.DistrictEvent}/${item.code}/$districtName")
                             }
                             .padding(horizontal = 15.dp, vertical = 15.dp),
                         verticalAlignment = Alignment.CenterVertically,
@@ -79,7 +85,13 @@ fun DistrictPage(
                             Column(
                                 modifier = Modifier
                                     .clip(MaterialTheme.shapes.small)
-                                    .background(MaterialTheme.colorScheme.primaryContainer),
+                                    .border(
+                                        border = BorderStroke(
+                                            width = 3.dp,
+                                            color = MaterialTheme.colorScheme.primaryContainer
+                                        ),
+                                        shape = MaterialTheme.shapes.small
+                                    ),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Center
                             ) {
@@ -90,7 +102,7 @@ fun DistrictPage(
                                 )
                             }
                             Text(
-                                text = item.name,
+                                text = districtName,
                                 style = MaterialTheme.typography.titleLarge,
                                 modifier = Modifier.padding(start = 15.dp)
                             )

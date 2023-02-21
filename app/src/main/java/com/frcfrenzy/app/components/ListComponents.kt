@@ -50,7 +50,7 @@ fun EventListItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(modifier = Modifier.fillMaxWidth(0.7F)) {
+            Column(modifier = Modifier.fillMaxWidth(0.65F)) {
                 Text(
                     text = eventName,
                     style = MaterialTheme.typography.titleMedium

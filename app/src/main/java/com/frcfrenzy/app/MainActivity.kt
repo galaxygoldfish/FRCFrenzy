@@ -54,10 +54,11 @@ class MainActivity : ComponentActivity() {
                 composable(NavDestination.Home) {
                     HomeView(navController)
                 }
-                composable("${NavDestination.DistrictEvent}/{districtCode}") {
+                composable("${NavDestination.DistrictEvent}/{districtCode}/{districtName}") {
                     DistrictEventView(
                         navController = navController,
-                        districtCode = it.arguments!!.getString("districtCode")!!
+                        districtCode = it.arguments!!.getString("districtCode")!!,
+                        districtName = it.arguments!!.getString("districtName")!!
                     )
                 }
             }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="month_list_offseason_event">
+        <item>JANUARY</item>
+        <item>FEBRUARY</item>
+        <item>MARCH</item>
+        <item>APRIL</item>
+        <item>MAY</item>
+        <item>JUNE</item>
+        <item>JULY</item>
+        <item>AUGUST</item>
+        <item>SEPTEMBER</item>
+        <item>OCTOBER</item>
+        <item>NOVEMBER</item>
+        <item>DECEMBER</item>
+    </array>
+</resources>
