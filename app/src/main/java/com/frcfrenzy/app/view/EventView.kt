@@ -57,11 +57,14 @@ import com.frcfrenzy.app.viewmodel.EventViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.frcfrenzy.app.R
 import com.frcfrenzy.app.components.CardWithIcon
+import com.frcfrenzy.app.components.MatchCard
 import com.frcfrenzy.app.misc.parseAPIDateFormat
 import com.frcfrenzy.app.theme.FRCFrenzyTheme
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class,
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalAnimationApi::class,
     ExperimentalFoundationApi::class
 )
 @Composable
@@ -73,7 +76,10 @@ fun EventView(
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
     LaunchedEffect(true) {
-        viewModel.refreshEventOverview(eventCode)
+        viewModel.apply {
+            refreshEventOverview(eventCode)
+            refreshMatchLists(eventCode)
+        }
     }
     FRCFrenzyTheme(tonalElevatedStatus = true) {
         Surface {
@@ -240,11 +246,11 @@ fun OverviewPage(viewModel: EventViewModel) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MatchPage(viewModel: EventViewModel) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        stickyHeader {
+        item {
             Row(modifier = Modifier.padding(15.dp)) {
                 FilterChip(
                     selected = viewModel.currentMatchViewingType == 0,
@@ -273,12 +279,12 @@ fun MatchPage(viewModel: EventViewModel) {
         }
         items(viewModel.currentQualificationList) { item ->
             AnimatedVisibility(visible = viewModel.currentMatchViewingType == 0) {
-
+                MatchCard(matchItem = item)
             }
         }
         items(viewModel.currentPlayoffList) { item ->
             AnimatedVisibility(visible = viewModel.currentMatchViewingType == 1) {
-
+                MatchCard(matchItem = item)
             }
         }
         item {

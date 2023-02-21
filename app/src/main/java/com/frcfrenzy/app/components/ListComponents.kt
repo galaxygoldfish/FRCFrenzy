@@ -21,10 +21,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.frcfrenzy.app.misc.parseAPIDateFormat
 import com.frcfrenzy.app.model.MatchItem
+import com.frcfrenzy.app.theme.getAllianceColorBLUE
+import com.frcfrenzy.app.theme.getAllianceColorRED
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -164,7 +167,95 @@ fun CardWithIcon(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MatchCard(matchItem: MatchItem) {
-
+fun MatchCard(
+    matchItem: MatchItem,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 15.dp, vertical = 5.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp)
+        ),
+        shape = MaterialTheme.shapes.medium,
+        onClick = onClick
+    ) {
+        Column {
+            Text(
+                text = matchItem.description,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(15.dp)
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier
+                    .fillMaxWidth(0.6F)
+                    .padding(start = 15.dp, bottom = 15.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(
+                        MaterialTheme
+                            .getAllianceColorRED()
+                            .copy(0.4F)
+                    )
+                    .border(
+                        border = BorderStroke(
+                            width = 3.dp,
+                            color = MaterialTheme.getAllianceColorRED()
+                        ),
+                        shape = MaterialTheme.shapes.medium
+                    )
+            ) {
+                Text(
+                    text = matchItem.teams[0].teamNumber.toString(),
+                    modifier = Modifier.padding(start = 15.dp, top = 15.dp, bottom = 15.dp)
+                )
+                Text(
+                    text = matchItem.teams[1].teamNumber.toString(),
+                    modifier = Modifier.padding(start = 15.dp)
+                )
+                Text(
+                    text = matchItem.teams[2].teamNumber.toString(),
+                    modifier = Modifier.padding(start = 15.dp, end = 15.dp)
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier
+                    .fillMaxWidth(0.6F)
+                    .padding(bottom = 15.dp, start = 15.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(
+                        MaterialTheme
+                            .getAllianceColorBLUE()
+                            .copy(0.4F)
+                    )
+                    .border(
+                        border = BorderStroke(
+                            width = 3.dp,
+                            color = MaterialTheme.getAllianceColorBLUE()
+                        ),
+                        shape = MaterialTheme.shapes.medium
+                    )
+            ) {
+                Text(
+                    text = matchItem.teams[3].teamNumber.toString(),
+                    modifier = Modifier.padding(start = 15.dp, top = 15.dp, bottom = 15.dp)
+                )
+                Text(
+                    text = matchItem.teams[4].teamNumber.toString(),
+                    modifier = Modifier.padding(start = 15.dp)
+                )
+                Text(
+                    text = matchItem.teams[5].teamNumber.toString(),
+                    modifier = Modifier.padding(start = 15.dp, end = 15.dp)
+                )
+            }
+        }
+    }
 }
