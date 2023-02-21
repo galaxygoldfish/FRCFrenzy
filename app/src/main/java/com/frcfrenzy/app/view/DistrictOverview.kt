@@ -1,7 +1,6 @@
 package com.frcfrenzy.app.view
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -15,15 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.BackHand
 import androidx.compose.material.icons.rounded.DateRange
-import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -36,9 +32,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
@@ -57,6 +51,7 @@ import com.frcfrenzy.app.viewmodel.DistrictViewModel
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.frcfrenzy.app.components.TeamListItem
+import com.frcfrenzy.app.misc.NavDestination
 import com.tencent.mmkv.MMKV
 import java.time.Year
 
@@ -64,7 +59,7 @@ import java.time.Year
     ExperimentalMaterialApi::class, ExperimentalAnimationApi::class
 )
 @Composable
-fun DistrictEventView(
+fun DistrictOverview(
     navController: NavController,
     districtCode: String,
     districtName: String,
@@ -227,7 +222,9 @@ fun DistrictEventView(
                                                         location = "${item.city}, ${item.stateprov}, ${item.country}",
                                                         startDate = item.dateStart,
                                                         endDate = item.dateEnd,
-                                                        onClick = {}
+                                                        onClick = {
+                                                            navController.navigate("${NavDestination.EventView}/${item.code}")
+                                                        }
                                                     )
                                                 }
                                             }

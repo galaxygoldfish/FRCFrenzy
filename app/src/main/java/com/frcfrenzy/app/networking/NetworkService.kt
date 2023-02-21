@@ -29,7 +29,8 @@ interface NetworkService {
         @Query("teamNumber") teamNumber: Int? = null,
         @Query("districtCode") districtCode: String? = null,
         @Query("tournamentType") tournamentType: String? = null,
-        @Query("weekNumber") weekNumber: Int? = null
+        @Query("weekNumber") weekNumber: Int? = null,
+        @Query("eventCode") eventCode: String? = null
     ) : EventList
 
     @GET("{season}/districts")

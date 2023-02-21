@@ -5,13 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.frcfrenzy.app.misc.NavDestination
 import com.frcfrenzy.app.theme.FRCFrenzyTheme
-import com.frcfrenzy.app.view.DistrictEventView
+import com.frcfrenzy.app.view.DistrictOverview
+import com.frcfrenzy.app.view.EventView
 import com.frcfrenzy.app.view.HomeView
 import com.frcfrenzy.app.view.WelcomeView
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -55,10 +55,16 @@ class MainActivity : ComponentActivity() {
                     HomeView(navController)
                 }
                 composable("${NavDestination.DistrictEvent}/{districtCode}/{districtName}") {
-                    DistrictEventView(
+                    DistrictOverview(
                         navController = navController,
                         districtCode = it.arguments!!.getString("districtCode")!!,
                         districtName = it.arguments!!.getString("districtName")!!
+                    )
+                }
+                composable("${NavDestination.EventView}/{eventCode}") {
+                    EventView(
+                        navController = navController,
+                        eventCode = it.arguments!!.getString("eventCode")!!
                     )
                 }
             }

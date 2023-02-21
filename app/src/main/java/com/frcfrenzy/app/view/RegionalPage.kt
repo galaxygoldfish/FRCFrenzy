@@ -34,17 +34,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.frcfrenzy.app.R
 import com.frcfrenzy.app.components.EventListItem
+import com.frcfrenzy.app.misc.NavDestination
 import com.frcfrenzy.app.viewmodel.RegionalViewModel
 import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class,
-    ExperimentalAnimationApi::class
-)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun RegionalPage(viewModel: RegionalViewModel = viewModel()) {
+fun RegionalPage(
+    viewModel: RegionalViewModel = viewModel(),
+    navController: NavController
+) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
     val pullRefreshState = rememberPullRefreshState(
@@ -105,7 +108,9 @@ fun RegionalPage(viewModel: RegionalViewModel = viewModel()) {
                                         location = "${item.city}, ${item.stateprov}, ${item.country}",
                                         startDate = item.dateStart,
                                         endDate = item.dateEnd,
-                                        onClick = {}
+                                        onClick = {
+                                            navController.navigate("${NavDestination.EventView}/${item.code}")
+                                        }
                                     )
                                 }
                             }

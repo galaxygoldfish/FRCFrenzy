@@ -14,4 +14,11 @@
         <item>NOVEMBER</item>
         <item>DECEMBER</item>
     </array>
+    <array name="event_detail_tab_title">
+        <item>OVERVIEW</item>
+        <item>MATCHES</item>
+        <item>RANKINGS</item>
+        <item>ALLIANCES</item>
+        <item>AWARDS</item>
+    </array>
 </resources>

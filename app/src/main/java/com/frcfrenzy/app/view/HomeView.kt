@@ -173,7 +173,7 @@ fun HomeView(
                     when (state) {
                         0 -> HomePage()
                         1 -> DistrictPage(navController = navController)
-                        2 -> RegionalPage()
+                        2 -> RegionalPage(navController = navController)
                         3 -> OffseasonPage(navController = navController)
                         4 -> TeamPage()
                     }

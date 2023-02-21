@@ -35,6 +35,7 @@ import com.frcfrenzy.app.viewmodel.OffseasonViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.frcfrenzy.app.R
 import com.frcfrenzy.app.components.EventListItem
+import com.frcfrenzy.app.misc.NavDestination
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
@@ -99,7 +100,9 @@ fun OffseasonPage(
                                     location = "${item.city}, ${item.stateprov}, ${item.country}",
                                     startDate = item.dateStart,
                                     endDate = item.dateEnd,
-                                    onClick = {}
+                                    onClick = {
+                                        navController.navigate("${NavDestination.EventView}/${item.code}")
+                                    }
                                 )
                             }
                         }
