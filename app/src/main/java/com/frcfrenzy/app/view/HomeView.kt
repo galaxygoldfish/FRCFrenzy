@@ -85,7 +85,7 @@ fun HomeView(
                                     modifier = Modifier.size(25.dp).padding(vertical = 5.dp, horizontal = 5.dp)
                                 )
                                 Text(
-                                    text = MMKV.defaultMMKV().decodeString("CURRENT_YEAR", Year.now().value.toString())!!,
+                                    text = MMKV.defaultMMKV().decodeInt("CURRENT_YEAR", Year.now().value).toString(),
                                     style = MaterialTheme.typography.labelLarge,
                                     modifier = Modifier.padding(top = 5.dp, bottom = 5.dp, end = 5.dp)
                                 )

@@ -7,9 +7,14 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
@@ -17,9 +22,13 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.CorporateFare
 import androidx.compose.material.icons.rounded.Map
+import androidx.compose.material.icons.rounded.MilitaryTech
+import androidx.compose.material.icons.rounded.PendingActions
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.RssFeed
+import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
@@ -35,10 +44,12 @@ import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -122,9 +133,16 @@ fun EventView(
                         }
                     }
                     HorizontalPager(
-                        pageCount = 5
-                    ) {
-                        OverviewPage(viewModel)
+                        pageCount = 5,
+                        state = pagerState,
+                        modifier = Modifier.fillMaxSize()
+                    ) {page ->
+                        AnimatedContent(targetState = page) {
+                            when(it) {
+                                0 -> OverviewPage(viewModel)
+                                1 -> MatchPage(viewModel)
+                            }
+                        }
                     }
                 }
             }
@@ -217,6 +235,80 @@ fun OverviewPage(viewModel: EventViewModel) {
                     }
                 )
                 // TODO add livestreams
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@Composable
+fun MatchPage(viewModel: EventViewModel) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        stickyHeader {
+            Row(modifier = Modifier.padding(15.dp)) {
+                FilterChip(
+                    selected = viewModel.currentMatchViewingType == 0,
+                    onClick = { viewModel.currentMatchViewingType = 0 },
+                    label = { Text(text = stringResource(id = R.string.event_view_filter_qualification)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Rounded.Timer,
+                            contentDescription = null
+                        )
+                    }
+                )
+                FilterChip(
+                    selected = viewModel.currentMatchViewingType == 1,
+                    onClick = { viewModel.currentMatchViewingType = 1 },
+                    label = { Text(text = stringResource(id = R.string.event_view_filter_playoff)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Rounded.MilitaryTech,
+                            contentDescription = null
+                        )
+                    },
+                    modifier = Modifier.padding(start = 10.dp)
+                )
+            }
+        }
+        items(viewModel.currentQualificationList) { item ->
+            AnimatedVisibility(visible = viewModel.currentMatchViewingType == 0) {
+
+            }
+        }
+        items(viewModel.currentPlayoffList) { item ->
+            AnimatedVisibility(visible = viewModel.currentMatchViewingType == 1) {
+
+            }
+        }
+        item {
+            AnimatedVisibility(
+                visible = viewModel.let {
+                    it.currentQualificationList.isEmpty() && it.currentMatchViewingType == 0 ||
+                            it.currentPlayoffList.isEmpty() && it.currentMatchViewingType == 1
+                }
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.align(Alignment.Center)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.PendingActions,
+                            contentDescription = null,
+                            modifier = Modifier.size(48.dp)
+                        )
+                        Text(
+                            text = stringResource(id = R.string.event_view_schedule_empty_text),
+                            style = MaterialTheme.typography.bodyLarge,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(20.dp)
+                        )
+                    }
+                }
             }
         }
     }

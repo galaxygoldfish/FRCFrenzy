@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.frcfrenzy.app.misc.parseAPIDateFormat
+import com.frcfrenzy.app.model.MatchItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -161,4 +162,9 @@ fun CardWithIcon(
             mainContent.invoke()
         }
     }
+}
+
+@Composable
+fun MatchCard(matchItem: MatchItem) {
+
 }

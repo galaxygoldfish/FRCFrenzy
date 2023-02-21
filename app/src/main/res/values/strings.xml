@@ -22,5 +22,8 @@
     <string name="event_view_venue_section_title">Venue information</string>
     <string name="event_view_date_section_title">Timeframe</string>
     <string name="event_view_web_content_section_title">Event coverage</string>
+    <string name="event_view_schedule_empty_text">The event schedule hasn\'t added these matches yet</string>
+    <string name="event_view_filter_qualification">Qualification</string>
+    <string name="event_view_filter_playoff">Playoff</string>
 
 </resources>
