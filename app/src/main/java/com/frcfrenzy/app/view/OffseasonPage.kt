@@ -48,7 +48,9 @@ fun OffseasonPage(
     val coroutineScope = rememberCoroutineScope()
     val pullRefreshState = rememberPullRefreshState(
         refreshing = viewModel.isRefreshing,
-        onRefresh = { viewModel.refreshOffseasonList(navController.context) }
+        onRefresh = {
+            viewModel.refreshOffseasonList(navController.context)
+        }
     )
     LaunchedEffect(true) {
         viewModel.refreshOffseasonList(navController.context)
@@ -57,31 +59,33 @@ fun OffseasonPage(
         Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
             Column {
                 AnimatedVisibility(visible = viewModel.offseasonList.isNotEmpty()) {
-                    ScrollableTabRow(
-                        selectedTabIndex = pagerState.currentPage,
-                        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
-                        edgePadding = 0.dp,
-                        divider = {},
-                    ) {
-                        repeat(viewModel.offseasonList.size) { index ->
-                            Tab(
-                                selected = pagerState.currentPage == index,
-                                onClick = {
-                                    coroutineScope.launch {
-                                        pagerState.animateScrollToPage(index)
+                    if (viewModel.offseasonList.isNotEmpty()) {
+                        ScrollableTabRow(
+                            selectedTabIndex = pagerState.currentPage,
+                            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
+                            edgePadding = 0.dp,
+                            divider = {},
+                        ) {
+                            repeat(viewModel.offseasonList.size) { index ->
+                                Tab(
+                                    selected = pagerState.currentPage == index,
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            pagerState.animateScrollToPage(index)
+                                        }
                                     }
+                                ) {
+                                    Text(
+                                        text = viewModel.offseasonList[index].first,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        modifier = Modifier.padding(20.dp),
+                                        color = if (pagerState.currentPage == index) {
+                                            MaterialTheme.colorScheme.primary
+                                        } else {
+                                            MaterialTheme.colorScheme.onSurfaceVariant
+                                        }
+                                    )
                                 }
-                            ) {
-                                Text(
-                                    text = viewModel.offseasonList[index].first,
-                                    style = MaterialTheme.typography.titleMedium,
-                                    modifier = Modifier.padding(20.dp),
-                                    color = if (pagerState.currentPage == index) {
-                                        MaterialTheme.colorScheme.primary
-                                    } else {
-                                        MaterialTheme.colorScheme.onSurfaceVariant
-                                    }
-                                )
                             }
                         }
                     }
@@ -91,19 +95,21 @@ fun OffseasonPage(
                     state = pagerState,
                     modifier = Modifier.fillMaxSize()
                 ) { pageNumber ->
-                    AnimatedVisibility(visible = !viewModel.isRefreshing && viewModel.offseasonList.indices.contains(pageNumber)) {
+                    AnimatedVisibility(visible = !viewModel.isRefreshing && viewModel.offseasonList.isNotEmpty()) {
                         LazyColumn(modifier = Modifier.fillMaxSize()) {
                             item { Spacer(Modifier.height(10.dp)) }
-                            items(viewModel.offseasonList[pageNumber].second) { item ->
-                                EventListItem(
-                                    eventName = item.name,
-                                    location = "${item.city}, ${item.stateprov}, ${item.country}",
-                                    startDate = item.dateStart,
-                                    endDate = item.dateEnd,
-                                    onClick = {
-                                        navController.navigate("${NavDestination.EventView}/${item.code}")
-                                    }
-                                )
+                            if (viewModel.offseasonList.indices.contains(pageNumber)) {
+                                items(viewModel.offseasonList[pageNumber].second) { item ->
+                                    EventListItem(
+                                        eventName = item.name,
+                                        location = "${item.city}, ${item.stateprov}, ${item.country}",
+                                        startDate = item.dateStart,
+                                        endDate = item.dateEnd,
+                                        onClick = {
+                                            navController.navigate("${NavDestination.EventView}/${item.code}")
+                                        }
+                                    )
+                                }
                             }
                         }
                     }

@@ -51,7 +51,7 @@ interface NetworkService {
         @Query("page") page: Int? = null
     ) : TeamList
 
-    @GET("{season}/schedule/{eventCode}")
+    @GET("{season}/matches/{eventCode}")
     suspend fun getEventSchedule(
         @Header("Authorization") basicAuth: String = getNetworkAuthCredentials(),
         @Path("season") season: Int = getDefaultYear(),

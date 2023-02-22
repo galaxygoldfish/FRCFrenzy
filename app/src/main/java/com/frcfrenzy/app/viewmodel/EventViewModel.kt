@@ -7,18 +7,18 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.frcfrenzy.app.model.EventItem
 import com.frcfrenzy.app.model.MatchItem
+import com.frcfrenzy.app.model.TeamItem
 import com.frcfrenzy.app.networking.NetworkServiceBuilder.getNetworkService
-import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.Year
 
 class EventViewModel : ViewModel() {
 
     var currentEventItem by mutableStateOf<EventItem?>(null)
     var currentQualificationList  = mutableStateListOf<MatchItem>()
     var currentPlayoffList = mutableStateListOf<MatchItem>()
+    var currentTeamList = mutableStateListOf<TeamItem>()
     var isRefreshing by mutableStateOf(false)
 
     var currentMatchViewingType by mutableStateOf(0)
@@ -57,6 +57,17 @@ class EventViewModel : ViewModel() {
                     ).schedule
                 )
             }
+            isRefreshing = false
+        }
+    }
+
+    fun refreshTeamList(eventCode: String) {
+        isRefreshing = true
+        currentTeamList.clear()
+        CoroutineScope(Dispatchers.Default).launch {
+            currentTeamList.addAll(
+                networkService.getTeamList(eventCode = eventCode).teams
+            )
             isRefreshing = false
         }
     }

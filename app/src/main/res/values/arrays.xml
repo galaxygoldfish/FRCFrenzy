@@ -16,6 +16,7 @@
     </array>
     <array name="event_detail_tab_title">
         <item>OVERVIEW</item>
+        <item>TEAMS</item>
         <item>MATCHES</item>
         <item>RANKINGS</item>
         <item>ALLIANCES</item>

@@ -22,6 +22,7 @@ class OffseasonViewModel : ViewModel() {
 
     fun refreshOffseasonList(context: Context) {
         isRefreshing = true
+        offseasonList.clear()
         CoroutineScope(Dispatchers.IO).launch {
             val remoteOffseasonEvents = networkService.getEventList(
                 excludeDistrictEvents = false,

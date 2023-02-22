@@ -10,7 +10,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,7 +35,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Surface
@@ -58,6 +59,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.frcfrenzy.app.R
 import com.frcfrenzy.app.components.CardWithIcon
 import com.frcfrenzy.app.components.MatchCard
+import com.frcfrenzy.app.components.TeamListItem
 import com.frcfrenzy.app.misc.parseAPIDateFormat
 import com.frcfrenzy.app.theme.FRCFrenzyTheme
 import kotlinx.coroutines.launch
@@ -79,6 +81,7 @@ fun EventView(
         viewModel.apply {
             refreshEventOverview(eventCode)
             refreshMatchLists(eventCode)
+            refreshTeamList(eventCode)
         }
     }
     FRCFrenzyTheme(tonalElevatedStatus = true) {
@@ -139,14 +142,16 @@ fun EventView(
                         }
                     }
                     HorizontalPager(
-                        pageCount = 5,
+                        pageCount = 6,
                         state = pagerState,
                         modifier = Modifier.fillMaxSize()
                     ) {page ->
                         AnimatedContent(targetState = page) {
                             when(it) {
                                 0 -> OverviewPage(viewModel)
-                                1 -> MatchPage(viewModel)
+                                1 -> EventTeamPage(viewModel)
+                                2 -> MatchPage(viewModel)
+                                3 -> RankingPage(viewModel)
                             }
                         }
                     }
@@ -317,5 +322,27 @@ fun MatchPage(viewModel: EventViewModel) {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun EventTeamPage(viewModel: EventViewModel) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        item { Spacer(Modifier.height(10.dp)) }
+        items(viewModel.currentTeamList) { item ->
+            TeamListItem(
+                teamName = item.nameShort,
+                teamNumber = item.teamNumber.toString(),
+                location = "${item.city}, ${item.stateProv}, ${item.country}",
+                onClick = {}
+            )
+        }
+    }
+}
+
+@Composable
+fun RankingPage(viewModel: EventViewModel) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+
     }
 }
