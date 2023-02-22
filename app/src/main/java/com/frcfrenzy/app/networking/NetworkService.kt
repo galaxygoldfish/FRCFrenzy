@@ -66,4 +66,4 @@ fun getNetworkAuthCredentials() : String = Credentials.basic(
     password = BuildConfig.NetworkToken
 )
 
-fun getDefaultYear() : Int = MMKV.defaultMMKV().decodeInt("CURRENT_YEAR", Year.now().value)
+fun getDefaultYear() : Int = Year.now().value

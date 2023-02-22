@@ -106,26 +106,6 @@ fun DistrictOverview(
                                 )
                             }
                         },
-                        actions = {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .padding(end = 10.dp)
-                                    .clip(MaterialTheme.shapes.small)
-                                    .background(MaterialTheme.colorScheme.primaryContainer)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Rounded.DateRange,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(25.dp).padding(vertical = 5.dp, horizontal = 5.dp)
-                                )
-                                Text(
-                                    text = MMKV.defaultMMKV().decodeString("CURRENT_YEAR", Year.now().value.toString())!!,
-                                    style = MaterialTheme.typography.labelLarge,
-                                    modifier = Modifier.padding(top = 5.dp, bottom = 5.dp, end = 5.dp)
-                                )
-                            }
-                        },
                         colors = TopAppBarDefaults.topAppBarColors(
                             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
                         )

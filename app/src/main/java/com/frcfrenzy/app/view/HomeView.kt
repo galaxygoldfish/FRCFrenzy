@@ -3,6 +3,7 @@ package com.frcfrenzy.app.view
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -68,26 +69,6 @@ fun HomeView(
                                         3 -> stringResource(id = R.string.home_title_offseason_page)
                                         else -> stringResource(id = R.string.home_title_teams_page)
                                     }
-                                )
-                            }
-                        },
-                        actions = {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .padding(end = 10.dp)
-                                    .clip(MaterialTheme.shapes.small)
-                                    .background(MaterialTheme.colorScheme.primaryContainer)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Rounded.DateRange,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(25.dp).padding(vertical = 5.dp, horizontal = 5.dp)
-                                )
-                                Text(
-                                    text = MMKV.defaultMMKV().decodeInt("CURRENT_YEAR", Year.now().value).toString(),
-                                    style = MaterialTheme.typography.labelLarge,
-                                    modifier = Modifier.padding(top = 5.dp, bottom = 5.dp, end = 5.dp)
                                 )
                             }
                         },
