@@ -5,6 +5,7 @@ import com.frcfrenzy.app.model.DistrictList
 import com.frcfrenzy.app.model.EventItem
 import com.frcfrenzy.app.model.EventList
 import com.frcfrenzy.app.model.MatchList
+import com.frcfrenzy.app.model.RankingList
 import com.frcfrenzy.app.model.SeasonInformation
 import com.frcfrenzy.app.model.TeamList
 import com.tencent.mmkv.MMKV
@@ -58,6 +59,13 @@ interface NetworkService {
         @Path("eventCode") eventCode: String,
         @Query("tournamentLevel") tournamentLevel: String
     ) : MatchList
+
+    @GET("{season}/rankings/{eventCode}")
+    suspend fun getEventRankings(
+        @Header("Authorization") basicAuth: String = getNetworkAuthCredentials(),
+        @Path("season") season: Int = getDefaultYear(),
+        @Path("eventCode") eventCode: String
+    ) : RankingList
 
 }
 

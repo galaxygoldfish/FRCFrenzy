@@ -8,6 +8,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -28,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.frcfrenzy.app.misc.parseAPIDateFormat
 import com.frcfrenzy.app.model.MatchItem
@@ -83,8 +85,8 @@ fun EventListItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TeamListItem(
-    teamName: String,
-    location: String,
+    teamName: AnnotatedString,
+    location: AnnotatedString,
     teamNumber: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -179,6 +181,8 @@ fun MatchCard(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
+    val redWon = (matchItem.scoreRedFinal ?: 0) > (matchItem.scoreBlueFinal ?: 0)
+    val blueWon = (matchItem.scoreBlueFinal ?: 0) > (matchItem.scoreRedFinal ?: 0)
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -198,162 +202,146 @@ fun MatchCard(
             Column {
                 CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.titleMedium) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        modifier = Modifier
-                            .fillMaxWidth(0.6F)
-                            .padding(start = 15.dp, bottom = 15.dp)
-                            .clip(MaterialTheme.shapes.medium)
-                            .background(
-                                MaterialTheme
-                                    .getAllianceColorRED()
-                                    .copy(0.4F)
-                            )
-                            .border(
-                                border = BorderStroke(
-                                    width = 3.dp,
-                                    color = MaterialTheme.getAllianceColorRED()
-                                ),
-                                shape = MaterialTheme.shapes.medium
-                            )
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(
-                            text = matchItem.teams[0].teamNumber.toString(),
-                            modifier = Modifier.padding(start = 15.dp, top = 15.dp, bottom = 15.dp)
-                        )
-                        Text(
-                            text = matchItem.teams[1].teamNumber.toString(),
-                            modifier = Modifier.padding(start = 15.dp)
-                        )
-                        Text(
-                            text = matchItem.teams[2].teamNumber.toString(),
-                            modifier = Modifier.padding(start = 15.dp, end = 15.dp)
-                        )
-                    }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        modifier = Modifier
-                            .fillMaxWidth(0.6F)
-                            .padding(bottom = 15.dp, start = 15.dp)
-                            .clip(MaterialTheme.shapes.medium)
-                            .background(
-                                MaterialTheme
-                                    .getAllianceColorBLUE()
-                                    .copy(0.4F)
-                            )
-                            .border(
-                                border = BorderStroke(
-                                    width = 3.dp,
-                                    color = MaterialTheme.getAllianceColorBLUE()
-                                ),
-                                shape = MaterialTheme.shapes.medium
-                            )
-                    ) {
-                        Text(
-                            text = matchItem.teams[3].teamNumber.toString(),
-                            modifier = Modifier.padding(start = 15.dp, top = 15.dp, bottom = 15.dp)
-                        )
-                        Text(
-                            text = matchItem.teams[4].teamNumber.toString(),
-                            modifier = Modifier.padding(start = 15.dp)
-                        )
-                        Text(
-                            text = matchItem.teams[5].teamNumber.toString(),
-                            modifier = Modifier.padding(start = 15.dp, end = 15.dp)
-                        )
-                    }
-                }
-            }
-            Column(modifier = Modifier.padding(start = 5.dp)) {
-                val redWon = (matchItem.scoreRedFinal ?: 0) > (matchItem.scoreBlueFinal ?: 0)
-                val blueWon = (matchItem.scoreBlueFinal ?: 0) > (matchItem.scoreRedFinal ?: 0)
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Row(
-                        modifier = Modifier
-                            .padding(bottom = 15.dp, start = 15.dp)
-                            .clip(MaterialTheme.shapes.medium)
-                            .background(
-                                if (redWon) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            modifier = Modifier
+                                .fillMaxWidth(0.75F)
+                                .padding(start = 15.dp, bottom = 15.dp)
+                                .clip(MaterialTheme.shapes.medium)
+                                .background(
                                     MaterialTheme
                                         .getAllianceColorRED()
                                         .copy(0.4F)
-                                } else {
-                                    Color.Transparent
-                                }
+                                )
+                                .border(
+                                    border = BorderStroke(
+                                        width = 3.dp,
+                                        color = MaterialTheme.getAllianceColorRED()
+                                    ),
+                                    shape = MaterialTheme.shapes.medium
+                                )
+                        ) {
+                            Text(
+                                text = matchItem.teams[0].teamNumber.toString(),
+                                modifier = Modifier.padding(
+                                    start = 15.dp,
+                                    top = 15.dp,
+                                    bottom = 15.dp
+                                )
                             )
-                            .border(
-                                border = BorderStroke(
-                                    width = 3.dp,
-                                    color = if (redWon) {
-                                        MaterialTheme.colorScheme.onBackground
+                            Text(
+                                text = matchItem.teams[1].teamNumber.toString(),
+                                modifier = Modifier.padding(start = 15.dp)
+                            )
+                            Text(
+                                text = matchItem.teams[2].teamNumber.toString(),
+                                modifier = Modifier.padding(start = 15.dp, end = 15.dp)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier
+                                .padding(bottom = 15.dp, end = 15.dp)
+                                .clip(MaterialTheme.shapes.medium)
+                                .background(
+                                    if (redWon) {
+                                        MaterialTheme
+                                            .getAllianceColorRED()
+                                            .copy(0.4F)
                                     } else {
                                         Color.Transparent
                                     }
-                                ),
-                                shape = MaterialTheme.shapes.medium
-                            )
-                    ) {
-                        Text(
-                            text = matchItem.scoreRedFinal.toString(),
-                            modifier = Modifier.padding(15.dp)
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        if (redWon) {
-                            Icon(
-                                imageVector = Icons.Rounded.Celebration,
-                                contentDescription = null,
-                                modifier = Modifier.padding(bottom = 15.dp),
-                                tint = MaterialTheme.getAllianceColorRED()
+                                )
+                                .border(
+                                    border = BorderStroke(
+                                        width = 3.dp,
+                                        color = if (redWon) {
+                                            MaterialTheme.getAllianceColorRED()
+                                        } else {
+                                            Color.Transparent
+                                        }
+                                    ),
+                                    shape = MaterialTheme.shapes.medium
+                                )
+                        ) {
+                            Text(
+                                text = matchItem.scoreRedFinal.toString(),
+                                modifier = Modifier.padding(15.dp)
                             )
                         }
                     }
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
                     Row(
-                        modifier = Modifier
-                            .padding(bottom = 15.dp, start = 15.dp)
-                            .clip(MaterialTheme.shapes.medium)
-                            .background(
-                                if (blueWon) {
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            modifier = Modifier
+                                .fillMaxWidth(0.75F)
+                                .padding(bottom = 15.dp, start = 15.dp)
+                                .clip(MaterialTheme.shapes.medium)
+                                .background(
                                     MaterialTheme
                                         .getAllianceColorBLUE()
-                                        .copy(0.3F)
-                                } else {
-                                    Color.Transparent
-                                }
+                                        .copy(0.4F)
+                                )
+                                .border(
+                                    border = BorderStroke(
+                                        width = 3.dp,
+                                        color = MaterialTheme.getAllianceColorBLUE()
+                                    ),
+                                    shape = MaterialTheme.shapes.medium
+                                )
+                        ) {
+                            Text(
+                                text = matchItem.teams[3].teamNumber.toString(),
+                                modifier = Modifier.padding(
+                                    start = 15.dp,
+                                    top = 15.dp,
+                                    bottom = 15.dp
+                                )
                             )
-                            .border(
-                                border = BorderStroke(
-                                    width = 3.dp,
-                                    color = if (blueWon) {
-                                        MaterialTheme.colorScheme.onBackground
+                            Text(
+                                text = matchItem.teams[4].teamNumber.toString(),
+                                modifier = Modifier.padding(start = 15.dp)
+                            )
+                            Text(
+                                text = matchItem.teams[5].teamNumber.toString(),
+                                modifier = Modifier.padding(start = 15.dp, end = 15.dp)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier
+                                .padding(bottom = 15.dp, end = 15.dp)
+                                .clip(MaterialTheme.shapes.medium)
+                                .background(
+                                    if (blueWon) {
+                                        MaterialTheme
+                                            .getAllianceColorBLUE()
+                                            .copy(0.3F)
                                     } else {
                                         Color.Transparent
                                     }
-                                ),
-                                shape = MaterialTheme.shapes.medium
-                            )
-                    ) {
-                        Text(
-                            text = matchItem.scoreBlueFinal.toString(),
-                            modifier = Modifier.padding(15.dp)
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        if (blueWon) {
-                            Icon(
-                                imageVector = Icons.Rounded.Celebration,
-                                contentDescription = null,
-                                modifier = Modifier.padding(bottom = 15.dp),
-                                tint = MaterialTheme.getAllianceColorBLUE()
+                                )
+                                .border(
+                                    border = BorderStroke(
+                                        width = 3.dp,
+                                        color = if (blueWon) {
+                                            MaterialTheme.getAllianceColorBLUE()
+                                        } else {
+                                            Color.Transparent
+                                        }
+                                    ),
+                                    shape = MaterialTheme.shapes.medium
+                                )
+                        ) {
+                            Text(
+                                text = matchItem.scoreBlueFinal.toString(),
+                                modifier = Modifier.padding(15.dp)
                             )
                         }
                     }

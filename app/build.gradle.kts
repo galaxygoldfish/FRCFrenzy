@@ -65,6 +65,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:1.3.3")
     implementation("androidx.compose.material3:material3:1.1.0-alpha06")
     implementation("androidx.compose.material:material:1.4.0-beta01")
+    implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.compose.material:material-icons-extended:1.3.1")
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

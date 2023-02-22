@@ -3,6 +3,7 @@ package com.frcfrenzy.app.view
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -50,8 +51,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.frcfrenzy.app.viewmodel.EventViewModel
@@ -82,6 +87,7 @@ fun EventView(
             refreshEventOverview(eventCode)
             refreshMatchLists(eventCode)
             refreshTeamList(eventCode)
+            refreshRankings(eventCode)
         }
     }
     FRCFrenzyTheme(tonalElevatedStatus = true) {
@@ -331,9 +337,11 @@ fun EventTeamPage(viewModel: EventViewModel) {
         item { Spacer(Modifier.height(10.dp)) }
         items(viewModel.currentTeamList) { item ->
             TeamListItem(
-                teamName = item.nameShort,
+                teamName = buildAnnotatedString { append(item.nameShort) },
                 teamNumber = item.teamNumber.toString(),
-                location = "${item.city}, ${item.stateProv}, ${item.country}",
+                location = buildAnnotatedString {
+                    append("${item.city}, ${item.stateProv}, ${item.country}")
+                },
                 onClick = {}
             )
         }
@@ -343,6 +351,28 @@ fun EventTeamPage(viewModel: EventViewModel) {
 @Composable
 fun RankingPage(viewModel: EventViewModel) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-
+        item { Spacer(Modifier.height(10.dp)) }
+        items(viewModel.currentRankingList) { item ->
+            TeamListItem(
+                teamName = buildAnnotatedString {
+                    append(item.first)
+                    withStyle(SpanStyle(color = MaterialTheme.colorScheme.onBackground.copy(0.6F))) {
+                        append("  (${item.second.teamNumber})")
+                    }
+                },
+                teamNumber = item.second.rank.toString(),
+                location = buildAnnotatedString {
+                    withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                        append("RP: ")
+                    }
+                    append(item.second.sortOrder1.toString())
+                    withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
+                        append("\t\tWLT: ")
+                    }
+                    append("${item.second.wins}-${item.second.losses}-${item.second.ties}")
+                },
+                onClick = {}
+            )
+        }
     }
 }

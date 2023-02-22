@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.frcfrenzy.app.R
@@ -180,9 +181,11 @@ fun DistrictOverview(
                                             item { Spacer(Modifier.height(10.dp)) }
                                             items(viewModel.districtTeamList) { item ->
                                                 TeamListItem(
-                                                    teamName = item.nameShort,
+                                                    teamName = buildAnnotatedString { append(item.nameShort) },
                                                     teamNumber = item.teamNumber.toString(),
-                                                    location = "${item.city}, ${item.stateProv}, ${item.country}",
+                                                    location = buildAnnotatedString {
+                                                        append("${item.city}, ${item.stateProv}, ${item.country}")
+                                                    },
                                                     onClick = {}
                                                 )
                                             }
