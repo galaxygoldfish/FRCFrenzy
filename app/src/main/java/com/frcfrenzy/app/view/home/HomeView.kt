@@ -1,25 +1,15 @@
-package com.frcfrenzy.app.view
+package com.frcfrenzy.app.view.home
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CalendarToday
-import androidx.compose.material.icons.rounded.CalendarViewMonth
-import androidx.compose.material.icons.rounded.DateRange
-import androidx.compose.material.icons.rounded.Diversity3
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Public
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.ShareLocation
 import androidx.compose.material.icons.rounded.Upcoming
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -30,9 +20,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -40,8 +28,10 @@ import com.frcfrenzy.app.viewmodel.HomeViewModel
 import com.frcfrenzy.app.theme.FRCFrenzyTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.frcfrenzy.app.R
-import com.tencent.mmkv.MMKV
-import java.time.Year
+import com.frcfrenzy.app.view.home.DistrictPage
+import com.frcfrenzy.app.view.home.HomePage
+import com.frcfrenzy.app.view.home.OffseasonPage
+import com.frcfrenzy.app.view.home.RegionalPage
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable

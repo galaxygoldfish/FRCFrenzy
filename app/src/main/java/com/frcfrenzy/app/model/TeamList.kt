@@ -20,5 +20,5 @@ data class TeamItem(
     val country: String,
     val rookieYear: Int,
     val robotName: String,
-    val districtCode: String
+    val districtCode: String?
 )

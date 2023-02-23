@@ -1,4 +1,4 @@
-package com.frcfrenzy.app.view
+package com.frcfrenzy.app.view.home
 
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW

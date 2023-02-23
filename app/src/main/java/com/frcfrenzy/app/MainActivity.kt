@@ -12,7 +12,8 @@ import com.frcfrenzy.app.misc.NavDestination
 import com.frcfrenzy.app.theme.FRCFrenzyTheme
 import com.frcfrenzy.app.view.DistrictOverview
 import com.frcfrenzy.app.view.EventView
-import com.frcfrenzy.app.view.HomeView
+import com.frcfrenzy.app.view.home.HomeView
+import com.frcfrenzy.app.view.TeamView
 import com.frcfrenzy.app.view.WelcomeView
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -54,17 +55,23 @@ class MainActivity : ComponentActivity() {
                 composable(NavDestination.Home) {
                     HomeView(navController)
                 }
-                composable("${NavDestination.DistrictEvent}/{districtCode}/{districtName}") {
+                composable("${NavDestination.DistrictOverview}/{districtCode}/{districtName}") {
                     DistrictOverview(
                         navController = navController,
                         districtCode = it.arguments!!.getString("districtCode")!!,
                         districtName = it.arguments!!.getString("districtName")!!
                     )
                 }
-                composable("${NavDestination.EventView}/{eventCode}") {
+                composable("${NavDestination.EventDetail}/{eventCode}") {
                     EventView(
                         navController = navController,
                         eventCode = it.arguments!!.getString("eventCode")!!
+                    )
+                }
+                composable("${NavDestination.TeamDetail}/{teamNumber}") {
+                    TeamView(
+                        navController = navController,
+                        teamNumber = it.arguments!!.getString("teamNumber")!!.toInt()
                     )
                 }
             }

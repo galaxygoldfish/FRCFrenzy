@@ -22,4 +22,9 @@
         <item>ALLIANCES</item>
         <item>AWARDS</item>
     </array>
+    <array name="team_detail_tab_title">
+        <item>OVERVIEW</item>
+        <item>EVENTS</item>
+        <item>AWARDS</item>
+    </array>
 </resources>

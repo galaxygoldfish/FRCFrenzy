@@ -73,6 +73,7 @@ import com.frcfrenzy.app.components.AwardsCard
 import com.frcfrenzy.app.components.CardWithIcon
 import com.frcfrenzy.app.components.MatchCard
 import com.frcfrenzy.app.components.TeamListItem
+import com.frcfrenzy.app.misc.NavDestination
 import com.frcfrenzy.app.misc.parseAPIDateFormat
 import com.frcfrenzy.app.theme.FRCFrenzyTheme
 import kotlinx.coroutines.launch
@@ -185,7 +186,7 @@ fun EventView(
                             AnimatedContent(targetState = page) {
                                 when (it) {
                                     0 -> OverviewPage(viewModel)
-                                    1 -> EventTeamPage(viewModel)
+                                    1 -> EventTeamPage(viewModel, navController)
                                     2 -> MatchPage(viewModel)
                                     3 -> RankingPage(viewModel)
                                     4 -> AlliancePage(viewModel)
@@ -370,7 +371,7 @@ fun MatchPage(viewModel: EventViewModel) {
 }
 
 @Composable
-fun EventTeamPage(viewModel: EventViewModel) {
+fun EventTeamPage(viewModel: EventViewModel, navController: NavController) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item { Spacer(Modifier.height(10.dp)) }
         items(viewModel.currentTeamList) { item ->
@@ -380,7 +381,9 @@ fun EventTeamPage(viewModel: EventViewModel) {
                 location = buildAnnotatedString {
                     append("${item.city}, ${item.stateProv}, ${item.country}")
                 },
-                onClick = {}
+                onClick = {
+                    navController.navigate("${NavDestination.TeamDetail}/${item.teamNumber}")
+                }
             )
         }
     }

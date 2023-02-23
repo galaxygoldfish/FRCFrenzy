@@ -14,6 +14,7 @@ import com.frcfrenzy.app.model.RankingItem
 import com.frcfrenzy.app.model.RankingList
 import com.frcfrenzy.app.model.TeamItem
 import com.frcfrenzy.app.networking.NetworkServiceBuilder.getNetworkService
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,10 +36,13 @@ class EventViewModel : ViewModel() {
     var currentMatchViewingType by mutableStateOf(0)
 
     private val networkService = getNetworkService()
+    private val exceptionHandler = CoroutineExceptionHandler { _, ex ->
+        Log.e("EVENTVM-EXCEPTION", ex.message.toString())
+    }
 
     fun refreshEventOverview(eventCode: String) {
         isRefreshing = true
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.Default).launch(exceptionHandler) {
             currentEventItem = networkService.getEventList(
                 excludeDistrictEvents = false,
                 eventCode = eventCode
@@ -49,7 +53,7 @@ class EventViewModel : ViewModel() {
 
     fun refreshMatchLists(eventCode: String) {
         isRefreshing = true
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.Default).launch(exceptionHandler) {
             currentQualificationList.apply {
                 clear()
                 addAll(
@@ -76,7 +80,7 @@ class EventViewModel : ViewModel() {
         isRefreshing = true
         currentTeamList.clear()
         teamToNameMap.clear()
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).launch(exceptionHandler) {
             networkService.getTeamList(eventCode = eventCode).teams.apply {
                 forEach { item ->
                     teamToNameMap[item.teamNumber] = item.nameShort
@@ -90,7 +94,7 @@ class EventViewModel : ViewModel() {
     fun refreshRankings(eventCode: String) {
         isRefreshing = true
         currentRankingList.clear()
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).launch(exceptionHandler) {
             networkService.getEventRankings(eventCode = eventCode).rankings.forEach { item ->
                 teamToNameMap[item.teamNumber]?.let {
                     currentRankingList.add(Pair(it, item))
@@ -103,7 +107,7 @@ class EventViewModel : ViewModel() {
     fun refreshAllianceSelections(eventCode: String) {
         isRefreshing = true
         currentAllianceList.clear()
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.Default).launch(exceptionHandler) {
             currentAllianceList.addAll(
                 networkService.getAllianceSelections(
                     eventCode = eventCode
@@ -116,7 +120,7 @@ class EventViewModel : ViewModel() {
     fun refreshAwardsList(eventCode: String) {
         isRefreshing = true
         currentAwardsList.clear()
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.Default).launch(exceptionHandler) {
             networkService.getAwardsList(eventCode = eventCode).awards.forEach { item ->
                teamToNameMap[item.teamNumber]?.let {
                     currentAwardsList.add(Pair(it, item))

@@ -31,4 +31,8 @@
     <string name="event_view_alliance_selection_empty_text">Alliance selection hasn\'t happened at this event yet</string>
     <string name="event_view_awards_empty_text">Awards haven\'t been presented at this event yet</string>
 
+    <string name="team_view_rookie_year_prefix">Rookie year in %1$s</string>
+    <string name="team_view_district_prefix">Part of the %1$s district</string>
+    <string name="team_view_no_district">This team isn\'t part of a district</string>
+
 </resources>

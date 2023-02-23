@@ -1,11 +1,8 @@
-package com.frcfrenzy.app.view
+package com.frcfrenzy.app.view.home
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,12 +16,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowRight
-import androidx.compose.material.icons.rounded.ArrowRightAlt
 import androidx.compose.material.icons.rounded.NavigateNext
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -75,7 +69,7 @@ fun DistrictPage(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                navController.navigate("${NavDestination.DistrictEvent}/${item.code}/$districtName")
+                                navController.navigate("${NavDestination.DistrictOverview}/${item.code}/$districtName")
                             }
                             .padding(horizontal = 15.dp, vertical = 15.dp),
                         verticalAlignment = Alignment.CenterVertically,

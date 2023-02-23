@@ -1,4 +1,4 @@
-package com.frcfrenzy.app.view
+package com.frcfrenzy.app.view.home
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
@@ -28,12 +27,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.frcfrenzy.app.viewmodel.OffseasonViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.frcfrenzy.app.R
 import com.frcfrenzy.app.components.EventListItem
 import com.frcfrenzy.app.misc.NavDestination
 import kotlinx.coroutines.launch
@@ -106,7 +103,7 @@ fun OffseasonPage(
                                         startDate = item.dateStart,
                                         endDate = item.dateEnd,
                                         onClick = {
-                                            navController.navigate("${NavDestination.EventView}/${item.code}")
+                                            navController.navigate("${NavDestination.EventDetail}/${item.code}")
                                         }
                                     )
                                 }
