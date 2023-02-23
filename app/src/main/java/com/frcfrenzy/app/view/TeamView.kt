@@ -8,14 +8,17 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Badge
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Map
@@ -52,6 +55,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.frcfrenzy.app.R
 import com.frcfrenzy.app.components.CardWithIcon
+import com.frcfrenzy.app.components.EventListItem
+import com.frcfrenzy.app.misc.NavDestination
 import com.frcfrenzy.app.theme.FRCFrenzyTheme
 import kotlinx.coroutines.launch
 
@@ -68,11 +73,20 @@ fun TeamView(
     val pagerState = rememberPagerState()
     val pullRefreshState = rememberPullRefreshState(
         refreshing = viewModel.isRefreshing,
-        onRefresh = { /*TODO*/ }
+        onRefresh = {
+            viewModel.apply {
+                when (pagerState.currentPage) {
+                    0 -> refreshTeamDetail(teamNumber)
+                    1 -> refreshEventList(teamNumber)
+
+                }
+            }
+        }
     )
     LaunchedEffect(true) {
         viewModel.apply {
-            refreshTeamList(teamNumber)
+            refreshTeamDetail(teamNumber)
+            refreshEventList(teamNumber)
         }
     }
     FRCFrenzyTheme(tonalElevatedStatus = true) {
@@ -145,6 +159,7 @@ fun TeamView(
                             AnimatedContent(targetState = page) {
                                 when (it) {
                                     0 -> TeamOverviewPage(viewModel)
+                                    1 -> TeamEventPage(viewModel, navController)
                                 }
                             }
                             PullRefreshIndicator(
@@ -257,8 +272,21 @@ fun TeamOverviewPage(viewModel: TeamViewModel) {
 }
 
 @Composable
-fun TeamEventPage(viewModel: TeamViewModel) {
-
+fun TeamEventPage(viewModel: TeamViewModel, navController: NavController) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        item { Spacer(modifier = Modifier.height(10.dp)) }
+        items(viewModel.currentEventList) { item ->
+            EventListItem(
+                eventName = item.name,
+                location = "${item.city}, ${item.stateprov}, ${item.country}",
+                startDate = item.dateStart,
+                endDate = item.dateEnd,
+                onClick = {
+                    navController.navigate("${NavDestination.EventDetail}/${item.code}")
+                }
+            )
+        }
+    }
 }
 
 @Composable

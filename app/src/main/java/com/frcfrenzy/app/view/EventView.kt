@@ -425,7 +425,7 @@ fun AlliancePage(viewModel: EventViewModel) {
         items(viewModel.currentAllianceList) { item ->
             AllianceCard(allianceItem = item)
         }
-        if (viewModel.currentAwardsList.isEmpty()) {
+        if (viewModel.currentAllianceList.isEmpty()) {
             item {
                 Column(
                     modifier = Modifier.fillMaxSize(),
