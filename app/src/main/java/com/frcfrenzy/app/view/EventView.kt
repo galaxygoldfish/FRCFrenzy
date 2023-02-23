@@ -8,6 +8,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,16 +21,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.CorporateFare
+import androidx.compose.material.icons.rounded.FactCheck
 import androidx.compose.material.icons.rounded.Map
 import androidx.compose.material.icons.rounded.MilitaryTech
 import androidx.compose.material.icons.rounded.PendingActions
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.RssFeed
 import androidx.compose.material.icons.rounded.Timer
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -62,6 +68,8 @@ import androidx.navigation.NavController
 import com.frcfrenzy.app.viewmodel.EventViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.frcfrenzy.app.R
+import com.frcfrenzy.app.components.AllianceCard
+import com.frcfrenzy.app.components.AwardsCard
 import com.frcfrenzy.app.components.CardWithIcon
 import com.frcfrenzy.app.components.MatchCard
 import com.frcfrenzy.app.components.TeamListItem
@@ -72,7 +80,7 @@ import kotlinx.coroutines.launch
 @OptIn(
     ExperimentalMaterial3Api::class,
     ExperimentalAnimationApi::class,
-    ExperimentalFoundationApi::class
+    ExperimentalFoundationApi::class, ExperimentalMaterialApi::class
 )
 @Composable
 fun EventView(
@@ -82,12 +90,29 @@ fun EventView(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = viewModel.isRefreshing,
+        onRefresh = {
+            viewModel.apply {
+                when (pagerState.currentPage) {
+                    0 -> refreshEventOverview(eventCode)
+                    1 -> refreshMatchLists(eventCode)
+                    2 -> refreshTeamList(eventCode)
+                    3 -> refreshRankings(eventCode)
+                    4 -> refreshAllianceSelections(eventCode)
+                    5 -> refreshAwardsList(eventCode)
+                }
+            }
+        }
+    )
     LaunchedEffect(true) {
         viewModel.apply {
             refreshEventOverview(eventCode)
             refreshMatchLists(eventCode)
             refreshTeamList(eventCode)
             refreshRankings(eventCode)
+            refreshAllianceSelections(eventCode)
+            refreshAwardsList(eventCode)
         }
     }
     FRCFrenzyTheme(tonalElevatedStatus = true) {
@@ -151,14 +176,27 @@ fun EventView(
                         pageCount = 6,
                         state = pagerState,
                         modifier = Modifier.fillMaxSize()
-                    ) {page ->
-                        AnimatedContent(targetState = page) {
-                            when(it) {
-                                0 -> OverviewPage(viewModel)
-                                1 -> EventTeamPage(viewModel)
-                                2 -> MatchPage(viewModel)
-                                3 -> RankingPage(viewModel)
+                    ) { page ->
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .pullRefresh(pullRefreshState)
+                        ) {
+                            AnimatedContent(targetState = page) {
+                                when (it) {
+                                    0 -> OverviewPage(viewModel)
+                                    1 -> EventTeamPage(viewModel)
+                                    2 -> MatchPage(viewModel)
+                                    3 -> RankingPage(viewModel)
+                                    4 -> AlliancePage(viewModel)
+                                    5 -> AwardsPage(viewModel)
+                                }
                             }
+                            PullRefreshIndicator(
+                                refreshing = viewModel.isRefreshing,
+                                state = pullRefreshState,
+                                modifier = Modifier.align(Alignment.TopCenter)
+                            )
                         }
                     }
                 }
@@ -373,6 +411,70 @@ fun RankingPage(viewModel: EventViewModel) {
                 },
                 onClick = {}
             )
+        }
+    }
+}
+
+@Composable
+fun AlliancePage(viewModel: EventViewModel) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        item { Spacer(Modifier.height(10.dp)) }
+        items(viewModel.currentAllianceList) { item ->
+            AllianceCard(allianceItem = item)
+        }
+        if (viewModel.currentAwardsList.isEmpty()) {
+            item {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.FactCheck,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(top = 20.dp)
+                            .size(40.dp)
+                    )
+                    Text(
+                        text = stringResource(id = R.string.event_view_alliance_selection_empty_text),
+                        modifier = Modifier.padding(20.dp),
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun AwardsPage(viewModel: EventViewModel) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        item { Spacer(Modifier.height(10.dp)) }
+        items(viewModel.currentAwardsList) { item ->
+            AwardsCard(awardItem = item.second, teamName = item.first)
+        }
+        if (viewModel.currentAwardsList.isEmpty()) {
+            item {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.MilitaryTech,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(top = 20.dp)
+                            .size(40.dp)
+                    )
+                    Text(
+                        text = stringResource(id = R.string.event_view_awards_empty_text),
+                        modifier = Modifier.padding(20.dp),
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
         }
     }
 }

@@ -66,8 +66,7 @@ fun HomeView(
                                         0 -> stringResource(id = R.string.home_title_home_page)
                                         1 -> stringResource(id = R.string.home_title_districts_page)
                                         2 -> stringResource(id = R.string.home_title_regionals_page)
-                                        3 -> stringResource(id = R.string.home_title_offseason_page)
-                                        else -> stringResource(id = R.string.home_title_teams_page)
+                                        else -> stringResource(id = R.string.home_title_offseason_page)
                                     }
                                 )
                             }
@@ -131,19 +130,6 @@ fun HomeView(
                                 Text(text = stringResource(id = R.string.home_title_offseason_page))
                             }
                         )
-                        NavigationBarItem(
-                            selected = viewModel.currentNavigationTab == 4,
-                            onClick = { viewModel.currentNavigationTab = 4 },
-                            icon = {
-                                Icon(
-                                    imageVector = Icons.Rounded.Diversity3,
-                                    contentDescription = null
-                                )
-                            },
-                            label = {
-                                Text(text = stringResource(id = R.string.home_title_teams_page))
-                            }
-                        )
                     }
                 }
             ) { paddingValues ->
@@ -156,7 +142,6 @@ fun HomeView(
                         1 -> DistrictPage(navController = navController)
                         2 -> RegionalPage(navController = navController)
                         3 -> OffseasonPage(navController = navController)
-                        4 -> TeamPage()
                     }
                 }
             }

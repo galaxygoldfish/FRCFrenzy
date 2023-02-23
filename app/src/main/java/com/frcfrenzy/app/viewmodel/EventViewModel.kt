@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.frcfrenzy.app.model.AllianceItem
+import com.frcfrenzy.app.model.AwardItem
 import com.frcfrenzy.app.model.EventItem
 import com.frcfrenzy.app.model.MatchItem
 import com.frcfrenzy.app.model.RankingItem
@@ -22,8 +24,11 @@ class EventViewModel : ViewModel() {
     var currentQualificationList  = mutableStateListOf<MatchItem>()
     var currentPlayoffList = mutableStateListOf<MatchItem>()
     var currentTeamList = mutableStateListOf<TeamItem>()
-    var teamToNameMap = mutableMapOf<Int, String>()
     var currentRankingList = mutableStateListOf<Pair<String, RankingItem>>()
+    var currentAllianceList = mutableStateListOf<AllianceItem>()
+    val currentAwardsList = mutableStateListOf<Pair<String, AwardItem>>()
+
+    var teamToNameMap = mutableMapOf<Int, String>()
 
     var currentEventItem by mutableStateOf<EventItem?>(null)
     var isRefreshing by mutableStateOf(false)
@@ -90,6 +95,32 @@ class EventViewModel : ViewModel() {
                 teamToNameMap[item.teamNumber]?.let {
                     currentRankingList.add(Pair(it, item))
                 }
+            }
+            isRefreshing = false
+        }
+    }
+
+    fun refreshAllianceSelections(eventCode: String) {
+        isRefreshing = true
+        currentAllianceList.clear()
+        CoroutineScope(Dispatchers.Default).launch {
+            currentAllianceList.addAll(
+                networkService.getAllianceSelections(
+                    eventCode = eventCode
+                ).alliances
+            )
+            isRefreshing = false
+        }
+    }
+
+    fun refreshAwardsList(eventCode: String) {
+        isRefreshing = true
+        currentAwardsList.clear()
+        CoroutineScope(Dispatchers.Default).launch {
+            networkService.getAwardsList(eventCode = eventCode).awards.forEach { item ->
+               teamToNameMap[item.teamNumber]?.let {
+                    currentAwardsList.add(Pair(it, item))
+               }
             }
             isRefreshing = false
         }

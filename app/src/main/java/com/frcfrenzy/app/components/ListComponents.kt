@@ -30,8 +30,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.frcfrenzy.app.misc.parseAPIDateFormat
+import com.frcfrenzy.app.model.AllianceItem
+import com.frcfrenzy.app.model.AwardItem
 import com.frcfrenzy.app.model.MatchItem
 import com.frcfrenzy.app.theme.getAllianceColorBLUE
 import com.frcfrenzy.app.theme.getAllianceColorRED
@@ -348,5 +353,99 @@ fun MatchCard(
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AllianceCard(
+    allianceItem: AllianceItem,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = { }
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 15.dp, vertical = 5.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp)
+        ),
+        shape = MaterialTheme.shapes.medium,
+        onClick = onClick
+    ) {
+        Text(
+            text = allianceItem.name,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(15.dp)
+        )
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 15.dp, bottom = 15.dp, end = 15.dp)
+        ) {
+            listOf(allianceItem.captain, allianceItem.round1, allianceItem.round2).forEachIndexed { index, item ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(
+                            when (index) {
+                                0 -> 0.3F
+                                1 -> 0.4F
+                                else -> 0.8F
+                            }
+                        )
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(MaterialTheme.colorScheme.secondary.copy(0.2F))
+                        .border(
+                            border = BorderStroke(
+                                width = 3.dp,
+                                color = MaterialTheme.colorScheme.secondary
+                            ),
+                            shape = MaterialTheme.shapes.medium
+                        ),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = item.toString(),
+                        modifier = Modifier.padding(vertical = 15.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun AwardsCard(
+    awardItem: AwardItem,
+    teamName: String,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 15.dp, vertical = 5.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp)
+        ),
+        shape = MaterialTheme.shapes.medium
+    ) {
+        Text(
+            text = awardItem.name,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(15.dp)
+        )
+        Text(
+            text = buildAnnotatedString {
+                append(teamName)
+                withStyle(
+                    SpanStyle(color = MaterialTheme.colorScheme.onBackground.copy(0.7F))
+                ) {
+                    append("\t\t${awardItem.teamNumber}")
+                }
+            },
+            modifier = Modifier.padding(start = 15.dp, end = 15.dp, bottom = 15.dp)
+        )
     }
 }

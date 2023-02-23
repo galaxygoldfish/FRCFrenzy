@@ -1,6 +1,9 @@
 package com.frcfrenzy.app.networking
 
 import com.frcfrenzy.app.BuildConfig
+import com.frcfrenzy.app.model.AllianceItem
+import com.frcfrenzy.app.model.AllianceList
+import com.frcfrenzy.app.model.AwardsList
 import com.frcfrenzy.app.model.DistrictList
 import com.frcfrenzy.app.model.EventItem
 import com.frcfrenzy.app.model.EventList
@@ -66,6 +69,20 @@ interface NetworkService {
         @Path("season") season: Int = getDefaultYear(),
         @Path("eventCode") eventCode: String
     ) : RankingList
+
+    @GET("{season}/alliances/{eventCode}")
+    suspend fun getAllianceSelections(
+        @Header("Authorization") basicAuth: String = getNetworkAuthCredentials(),
+        @Path("season") season: Int = getDefaultYear(),
+        @Path("eventCode") eventCode: String
+    ) : AllianceList
+
+    @GET("{season}/awards/event/{eventCode}")
+    suspend fun getAwardsList(
+        @Header("Authorization") basicAuth: String = getNetworkAuthCredentials(),
+        @Path("season") season: Int = getDefaultYear(),
+        @Path("eventCode") eventCode: String
+    ) : AwardsList
 
 }
 

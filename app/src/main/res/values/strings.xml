@@ -28,5 +28,7 @@
     <string name="event_view_schedule_empty_text">The event schedule hasn\'t added these matches yet</string>
     <string name="event_view_filter_qualification">Qualification</string>
     <string name="event_view_filter_playoff">Playoff</string>
+    <string name="event_view_alliance_selection_empty_text">Alliance selection hasn\'t happened at this event yet</string>
+    <string name="event_view_awards_empty_text">Awards haven\'t been presented at this event yet</string>
 
 </resources>
